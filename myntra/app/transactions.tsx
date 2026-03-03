@@ -1,6 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
 import TransactionsList from "./TransactionsList";
+import React from "react";
 
 export default function TransactionsScreen() {
   const { theme } = useTheme();

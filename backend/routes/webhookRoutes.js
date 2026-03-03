@@ -49,7 +49,7 @@ router.post("/payment", async (req, res) => {
     await AuditLog.create({
       userId: event.userId,
       transactionId: tx._id,
-      action: event.status,
+      action: event.status?.toUpperCase(),
       metadata: event,
     });
 
