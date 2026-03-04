@@ -167,42 +167,55 @@ export default function Bag() {
               <Text style={styles.itemSize}>Size: {item.size}</Text>
               <Text style={styles.itemPrice}>₹{item.productId.price}</Text>
 
-              <View style={styles.quantityContainer}>
-                <TouchableOpacity style={styles.quantityButton}>
-                  <Ionicons
-                    name="remove-outline"
-                    size={20}
-                    color={theme.colors.text}
-                  />
-                </TouchableOpacity>
-                <Text style={[styles.quantity, { color: theme.colors.text }]}>
-                  {item.quantity}
-                </Text>
-                <TouchableOpacity style={styles.quantityButton}>
-                  <Ionicons
-                    name="add-outline"
-                    size={20}
-                    color={theme.colors.text}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.removeButton}
-                  onPress={() => handledelete(item._id)}
-                >
+              <View style={styles.bottomRow}>
+                {/* Quantity Controls */}
+                <View style={styles.quantityWrapper}>
                   <TouchableOpacity
-                    onPress={() => moveToSaved(item._id)}
-                    style={{ marginLeft: 15 }}
+                    style={styles.qtyButton}
+                    onPress={() =>
+                      item.quantity > 1 &&
+                      updateQuantity(item._id, item.quantity - 1)
+                    }
                   >
-                    <Text style={{ color: theme.colors.primary }}>
-                      SAVE FOR LATER
-                    </Text>
+                    <Ionicons
+                      name="remove"
+                      size={18}
+                      color={theme.colors.text}
+                    />
                   </TouchableOpacity>
-                  <Ionicons
-                    name="trash-outline"
-                    size={20}
-                    color={theme.colors.primary}
-                  />
-                </TouchableOpacity>
+
+                  <Text style={styles.qtyText}>{item.quantity}</Text>
+
+                  <TouchableOpacity
+                    style={styles.qtyButton}
+                    onPress={() => updateQuantity(item._id, item.quantity + 1)}
+                  >
+                    <Ionicons name="add" size={18} color={theme.colors.text} />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Action Buttons */}
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={() => moveToSaved(item._id)}
+                  >
+                    <Ionicons
+                      name="bookmark-outline"
+                      size={16}
+                      color={theme.colors.primary}
+                    />
+                    <Text style={styles.saveText}>Save</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handledelete(item._id)}
+                  >
+                    <Ionicons name="trash-outline" size={16} color="#E53935" />
+                    <Text style={styles.deleteText}>Remove</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </View>
@@ -232,10 +245,12 @@ export default function Bag() {
                   <Text style={styles.itemName}>{item.productId.name}</Text>
                   <Text style={styles.itemPrice}>₹{item.priceAtTime}</Text>
 
-                  <TouchableOpacity onPress={() => moveToBag(item._id)}>
-                    <Text style={{ color: theme.colors.primary }}>
-                      MOVE TO BAG
-                    </Text>
+                  <TouchableOpacity
+                    style={styles.moveToBagButton}
+                    onPress={() => moveToBag(item._id)}
+                  >
+                    <Ionicons name="cart-outline" size={16} color="#fff" />
+                    <Text style={styles.moveToBagText}>Move to Bag</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -351,4 +366,89 @@ const createStyles = (theme: any) =>
       alignItems: "center",
     },
     checkoutButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+
+    bottomRow: {
+      marginTop: 10,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+
+    quantityWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: theme.colors.background,
+      borderRadius: 20,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderWidth: 1,
+      borderColor: theme.colors.border,
+    },
+
+    qtyButton: {
+      padding: 6,
+    },
+
+    qtyText: {
+      marginHorizontal: 10,
+      fontSize: 16,
+      fontWeight: "600",
+      color: theme.colors.text,
+    },
+
+    actionButtons: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+
+    saveButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 10,
+      paddingVertical: 6,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: theme.colors.primary,
+      marginRight: 8,
+    },
+
+    saveText: {
+      marginLeft: 4,
+      color: theme.colors.primary,
+      fontSize: 13,
+      fontWeight: "600",
+    },
+
+    deleteButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 10,
+      paddingVertical: 6,
+      borderRadius: 20,
+      backgroundColor: "#FDECEA",
+    },
+
+    deleteText: {
+      marginLeft: 4,
+      color: "#E53935",
+      fontSize: 13,
+      fontWeight: "600",
+    },
+
+    moveToBagButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: theme.colors.primary,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
+      borderRadius: 20,
+      marginTop: 8,
+    },
+
+    moveToBagText: {
+      color: "#fff",
+      marginLeft: 5,
+      fontWeight: "600",
+      fontSize: 13,
+    },
   });
