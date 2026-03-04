@@ -59,6 +59,30 @@ export default function Bag() {
     }
   };
 
+  const moveToSaved = async (itemId: string) => {
+    try {
+      await axios.put(
+        `https://myntra-clone-j4a9.onrender.com/bag/save/${itemId}`,
+      );
+
+      fetchproduct(); // refresh cart
+    } catch (error: any) {
+      alert("Error moving to saved");
+    }
+  };
+
+  const moveToBag = async (itemId: string) => {
+    try {
+      await axios.put(
+        `https://myntra-clone-j4a9.onrender.com/bag/move-to-bag/${itemId}`,
+      );
+
+      fetchproduct();
+    } catch (error: any) {
+      alert("Error moving to bag");
+    }
+  };
+
   const handledelete = async (itemid: any) => {
     try {
       await axios.delete(
@@ -165,6 +189,14 @@ export default function Bag() {
                   style={styles.removeButton}
                   onPress={() => handledelete(item._id)}
                 >
+                  <TouchableOpacity
+                    onPress={() => moveToSaved(item._id)}
+                    style={{ marginLeft: 15 }}
+                  >
+                    <Text style={{ color: theme.colors.primary }}>
+                      SAVE FOR LATER
+                    </Text>
+                  </TouchableOpacity>
                   <Ionicons
                     name="trash-outline"
                     size={20}
@@ -175,6 +207,41 @@ export default function Bag() {
             </View>
           </View>
         ))}
+
+        {savedItems.length > 0 && (
+          <>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                marginVertical: 10,
+                color: theme.colors.text,
+              }}
+            >
+              Saved For Later
+            </Text>
+
+            {savedItems.map((item: any) => (
+              <View key={item._id} style={styles.bagItem}>
+                <Image
+                  source={{ uri: item.productId.images[0] }}
+                  style={styles.itemImage}
+                />
+                <View style={styles.itemInfo}>
+                  <Text style={styles.brandName}>{item.productId.brand}</Text>
+                  <Text style={styles.itemName}>{item.productId.name}</Text>
+                  <Text style={styles.itemPrice}>₹{item.priceAtTime}</Text>
+
+                  <TouchableOpacity onPress={() => moveToBag(item._id)}>
+                    <Text style={{ color: theme.colors.primary }}>
+                      MOVE TO BAG
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </>
+        )}
       </ScrollView>
 
       <View style={styles.footer}>

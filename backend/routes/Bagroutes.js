@@ -107,19 +107,27 @@ router.put("/update/:itemid", async (req, res) => {
 });
 
 router.put("/save/:itemid", async (req, res) => {
-  await Bag.findByIdAndUpdate(req.params.itemid, {
-    status: "SAVED",
-  });
+  try {
+    await Bag.findByIdAndUpdate(req.params.itemid, {
+      status: "SAVED",
+    });
 
-  res.json({ message: "Moved to saved" });
+    res.json({ message: "Moved to saved" });
+  } catch (error) {
+    res.status(500).json({ message: "Error moving to saved" });
+  }
 });
 
 router.put("/move-to-bag/:itemid", async (req, res) => {
-  await Bag.findByIdAndUpdate(req.params.itemid, {
-    status: "ACTIVE",
-  });
+  try {
+    await Bag.findByIdAndUpdate(req.params.itemid, {
+      status: "ACTIVE",
+    });
 
-  res.json({ message: "Moved to bag" });
+    res.json({ message: "Moved to bag" });
+  } catch (error) {
+    res.status(500).json({ message: "Error moving to bag" });
+  }
 });
 
 router.post("/validate/:userid", async (req, res) => {
