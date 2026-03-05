@@ -32,7 +32,6 @@ export default function ProductDetails() {
   const [product, setproduct] = useState<any>(null);
   const [iswishlist, setiswishlist] = useState(false);
   const { addRecentlyViewed } = useRecentlyViewed();
-  const [recommendations, setRecommendations] = useState([]);
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -45,17 +44,6 @@ export default function ProductDetails() {
           `https://myntra-clone-j4a9.onrender.com/product/${id}`,
         );
         setproduct(res.data);
-
-        // 🔥 SAVE VIEW TO SERVER (for recommendation engine)
-        if (user?._id) {
-          await axios.post(
-            "https://myntra-clone-j4a9.onrender.com/history/view",
-            {
-              userId: user._id,
-              productId: res.data._id,
-            },
-          );
-        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -64,24 +52,6 @@ export default function ProductDetails() {
     };
 
     fetchproduct();
-  }, [id]);
-
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      try {
-        const res = await axios.get(
-          `https://myntra-clone-j4a9.onrender.com/recommendations/${id}?userId=${user?._id}`,
-        );
-
-        setRecommendations(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    if (id) {
-      fetchRecommendations();
-    }
   }, [id]);
 
   // ✅ AUTO SCROLL
@@ -152,32 +122,33 @@ export default function ProductDetails() {
     }
   };
 
-  // ✅ ADD TO BAG
-  const handleAddToBag = async () => {
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-    if (!selectedSize) {
+  // ✅ ADD TO BAG 
+  const handleAddToBag = async () => { 
+    if (!user) { 
+      router.push("/login"); 
+      return; 
+    } 
+    if (!selectedSize) { 
       alert("Please select a size");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await axios.post("https://myntra-clone-j4a9.onrender.com/bag", {
-        userId: user._id,
-        productId: id,
-        size: selectedSize,
-        quantity: 1,
-      });
-      router.push("/bag");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+       return; 
+      } 
+      
+      try { 
+        setLoading(true);
+         await axios.post("https://myntra-clone-j4a9.onrender.com/bag", 
+          { 
+          userId: user._id,
+           productId: id, 
+           size: selectedSize, 
+           quantity: 1, 
+          }); 
+          router.push("/bag"); 
+        } catch (error) { 
+          console.log(error); 
+        } finally { 
+          setLoading(false);
+         } 
+        };
 
   const handleScroll = (event: any) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -274,38 +245,6 @@ export default function ProductDetails() {
             </View>
           </View>
         </View>
-        {recommendations.length > 0 && (
-          <View style={{ marginTop: 30 }}>
-            <Text
-              style={{ fontSize: 18, fontWeight: "bold", marginBottom: 10 }}
-            >
-              You May Also Like
-            </Text>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {recommendations.map((item: any) => (
-                <TouchableOpacity
-                  key={item._id}
-                  onPress={() => router.push(`/product/${item._id}`)}
-                  style={{ marginRight: 15, width: 140 }}
-                >
-                  <Image
-                    source={{ uri: item.images[0] }}
-                    style={{ width: 140, height: 160, borderRadius: 10 }}
-                  />
-
-                  <Text numberOfLines={1} style={{ fontWeight: "bold" }}>
-                    {item.brand}
-                  </Text>
-
-                  <Text numberOfLines={1}>{item.name}</Text>
-
-                  <Text style={{ fontWeight: "bold" }}>₹{item.price}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        )}
       </ScrollView>
 
       <View style={styles.footer}>
