@@ -22,4 +22,26 @@ router.get("/:id", async (req, res) => {
     return res.status(500).json({ message: "Something went wrong" });
   }
 });
+
+router.get("/recommend/:productId", async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    const currentProduct = await Product.findById(productId);
+
+    if (!currentProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    const recommendations = await Product.find({
+      _id: { $ne: productId },
+      brand: currentProduct.brand
+    }).limit(6);
+
+    res.json(recommendations);
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;

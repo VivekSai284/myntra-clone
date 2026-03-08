@@ -11,6 +11,7 @@ const OrderRoutes = require("./routes/OrderRoutes");
 const recentlyViewedRoutes = require("./routes/RecentlyViewedRoutes");
 const webhookRoutes = require("./routes/webhookRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
+const recommendationRoutes = require("./routes/recommendation");
 const cors = require('cors');
 dotenv.config();
 const app = express();
@@ -32,6 +33,7 @@ app.use("/Order", OrderRoutes);
 app.use("/recently-viewed", recentlyViewedRoutes);
 app.use("/api/webhook", webhookRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/recommendation", recommendationRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

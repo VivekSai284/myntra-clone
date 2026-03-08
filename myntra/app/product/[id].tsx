@@ -30,6 +30,7 @@ export default function ProductDetails() {
   const autoScrollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const { user } = useAuth();
   const [product, setproduct] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
   const [iswishlist, setiswishlist] = useState(false);
   const { addRecentlyViewed } = useRecentlyViewed();
   const { theme } = useTheme();
@@ -69,6 +70,26 @@ export default function ProductDetails() {
     if (!product?._id) return;
     addRecentlyViewed(product);
   }, [product?._id]);
+
+  // ✅ FETCH RECOMMENDATIONS
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        const res = await axios.get(
+          `https://myntra-clone-j4a9.onrender.com/product/recommend/${id}`,
+        );
+
+        console.log("RECOMMENDATIONS:", res.data);  // 👈 ADD THIS
+        setRecommendations(res.data);
+      } catch (error) {
+        console.log("Recommendation error", error);
+      }
+    };
+
+    if (id) {
+      fetchRecommendations();
+    }
+  }, [id]);
 
   const startAutoScroll = () => {
     if (!product?.images?.length) return;
@@ -122,33 +143,32 @@ export default function ProductDetails() {
     }
   };
 
-  // ✅ ADD TO BAG 
-  const handleAddToBag = async () => { 
-    if (!user) { 
-      router.push("/login"); 
-      return; 
-    } 
-    if (!selectedSize) { 
+  // ✅ ADD TO BAG
+  const handleAddToBag = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    if (!selectedSize) {
       alert("Please select a size");
-       return; 
-      } 
-      
-      try { 
-        setLoading(true);
-         await axios.post("https://myntra-clone-j4a9.onrender.com/bag", 
-          { 
-          userId: user._id,
-           productId: id, 
-           size: selectedSize, 
-           quantity: 1, 
-          }); 
-          router.push("/bag"); 
-        } catch (error) { 
-          console.log(error); 
-        } finally { 
-          setLoading(false);
-         } 
-        };
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await axios.post("https://myntra-clone-j4a9.onrender.com/bag", {
+        userId: user._id,
+        productId: id,
+        size: selectedSize,
+        quantity: 1,
+      });
+      router.push("/bag");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleScroll = (event: any) => {
     const contentOffset = event.nativeEvent.contentOffset;
@@ -244,6 +264,58 @@ export default function ProductDetails() {
               ))}
             </View>
           </View>
+          {/* ✅ YOU MAY ALSO LIKE */}
+
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "bold",
+              marginTop: 20,
+              marginBottom: 10,
+              color: theme.colors.text,
+            }}
+          >
+            You May Also Like
+          </Text>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {recommendations.map((item: any) => (
+              <TouchableOpacity
+                key={item._id}
+                onPress={() => router.push(`/product/${item._id}`)}
+                style={{ marginRight: 15 }}
+              >
+                <Image
+                  source={{ uri: item.images[0] }}
+                  style={{
+                    width: 130,
+                    height: 160,
+                    borderRadius: 10,
+                    marginBottom: 5,
+                  }}
+                />
+
+                <Text
+                  style={{
+                    color: theme.colors.text,
+                    fontSize: 14,
+                    fontWeight: "500",
+                  }}
+                >
+                  {item.brand}
+                </Text>
+
+                <Text
+                  style={{
+                    color: theme.colors.primary,
+                    fontWeight: "bold",
+                  }}
+                >
+                  ₹{item.price}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       </ScrollView>
 
