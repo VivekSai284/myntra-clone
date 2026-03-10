@@ -45,7 +45,6 @@ export default function RootLayout() {
     if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
-  if (!loaded) return null;
 
   useEffect(() => {
     // When notification is received while app is open
@@ -74,6 +73,9 @@ export default function RootLayout() {
       responseSubscription.remove();
     };
   }, []);
+
+  if (!loaded) return null;
+  
   return (
     <ThemeProvider>
       <AuthProvider>

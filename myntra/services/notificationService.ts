@@ -1,6 +1,6 @@
 // app/services/notificationService.ts
 
-import * as Notifications from "expo-notifications";
+// import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import axios from "axios";
