@@ -34,6 +34,9 @@ app.use("/recently-viewed", recentlyViewedRoutes);
 app.use("/api/webhook", webhookRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/recommendation", recommendationRoutes);
+app.use("/api/notifications", require("./routes/notificationRoutes"));
+require("./workers/notificationWorker");
+app.use("/api/cart", require("./routes/Bagroutes"));
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

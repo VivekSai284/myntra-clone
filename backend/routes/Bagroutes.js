@@ -2,6 +2,7 @@ const express = require("express");
 const Bag = require("../models/Bag");
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
+const { addToCart } = require("../controllers/cartController");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -181,4 +182,6 @@ router.delete("/:itemid", async (req, res) => {
     return res.status(500).json({ message: "Error removing item from bag" });
   }
 });
+
+router.post("/add", addToCart);
 module.exports = router;

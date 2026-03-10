@@ -14,8 +14,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "@/context/AuthContext";
 import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useTheme } from "@/hooks/useTheme";
+import { registerForPushNotifications } from "@/services/notificationService";
 
-export default function Login() {
+export default async function Login() {
   const { login } = useAuth();
   const { syncWithServer } = useRecentlyViewed();
   const [email, setEmail] = useState("");
@@ -31,6 +32,7 @@ export default function Login() {
       setisloading(true);
       await login(email, password);
       await syncWithServer();
+      await registerForPushNotifications(user._id);
       router.replace("/(tabs)");
     } catch (error) {
       console.error(error);
@@ -50,7 +52,7 @@ export default function Login() {
       <View style={styles.formContainer}>
         <Text style={styles.title}>Welcome to Myntra</Text>
         <Text style={styles.subtitle}>Login to continue shopping</Text>
-        
+
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -74,10 +76,10 @@ export default function Login() {
             style={styles.eyeIcon}
             onPress={() => setShowPassword(!showPassword)}
           >
-            <Ionicons 
-              name={showPassword ? "eye-off-outline" : "eye-outline"} 
-              size={20} 
-              color={theme.colors.subText} 
+            <Ionicons
+              name={showPassword ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color={theme.colors.subText}
             />
           </TouchableOpacity>
         </View>

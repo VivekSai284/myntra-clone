@@ -9,8 +9,17 @@ import React from "react";
 import { AuthProvider } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import "@/utils/axiosConfig";
+import * as Notifications from "expo-notifications";
 
 SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }) as Notifications.NotificationBehavior,
+});
 
 function RootNavigator() {
   const { themeName } = useTheme();
@@ -38,6 +47,33 @@ export default function RootLayout() {
 
   if (!loaded) return null;
 
+  useEffect(() => {
+    // When notification is received while app is open
+    const receivedSubscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Foreground notification:", notification);
+      },
+    );
+
+    // When user taps notification (background or closed)
+    const responseSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("Notification tapped:", response);
+
+        const data = response.notification.request.content.data;
+
+        // Example navigation
+        if (data?.type === "order") {
+          // You can use router.push here
+          console.log("Navigate to order screen");
+        }
+      });
+
+    return () => {
+      receivedSubscription.remove();
+      responseSubscription.remove();
+    };
+  }, []);
   return (
     <ThemeProvider>
       <AuthProvider>
