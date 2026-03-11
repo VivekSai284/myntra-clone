@@ -1,11 +1,11 @@
 const DeviceToken = require("../models/deviceToken");
 
 exports.registerToken = async (req, res) => {
-  const { userId, token } = req.body;
+  const { userId, token, platform } = req.body;
 
   await DeviceToken.findOneAndUpdate(
     { token },
-    { user: userId, lastUsed: new Date() },
+    { user: userId, platform, lastUsed: new Date() },
     { upsert: true }
   );
 
