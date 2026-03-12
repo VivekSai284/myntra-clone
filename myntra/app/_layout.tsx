@@ -10,15 +10,17 @@ import { AuthProvider } from "@/context/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import "@/utils/axiosConfig";
 import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "../services/notificationService";
 
 SplashScreen.preventAutoHideAsync();
 
 Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }) as Notifications.NotificationBehavior,
+  handleNotification: async () =>
+    ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }) as Notifications.NotificationBehavior,
 });
 
 function RootNavigator() {
@@ -45,6 +47,14 @@ export default function RootLayout() {
     if (loaded) SplashScreen.hideAsync();
   }, [loaded]);
 
+  useEffect(() => {
+    async function getToken() {
+      const token = await registerForPushNotificationsAsync();
+      console.log("Push Token:", token);
+    }
+
+    getToken();
+  }, []);
 
   useEffect(() => {
     // When notification is received while app is open
@@ -75,7 +85,7 @@ export default function RootLayout() {
   }, []);
 
   if (!loaded) return null;
-  
+
   return (
     <ThemeProvider>
       <AuthProvider>
