@@ -16,7 +16,7 @@ import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
 import { useTheme } from "@/hooks/useTheme";
 import { registerForPushNotifications } from "@/services/notificationService";
 
-export default async function Login() {
+export default function Login() {
   const { login } = useAuth();
   const { syncWithServer } = useRecentlyViewed();
   const [email, setEmail] = useState("");
