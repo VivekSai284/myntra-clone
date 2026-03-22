@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155221791724",
+    "project_id": "myntra-clone-6bb40",
+    "storage_bucket": "myntra-clone-6bb40.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155221791724:android:d562780399edbb14d1e6c9",
+        "android_client_info": {
+          "package_name": "com.viveksai.myntra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7sZsRPlFT9ptPGbSUsTzeIfM7qx_oHPY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
