@@ -6,8 +6,7 @@
       }
     },
     "android":{
-      "package": "com.viveksai.myntra",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.viveksai.myntra"
     }
   }
 }
