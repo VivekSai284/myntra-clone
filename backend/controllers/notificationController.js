@@ -7,7 +7,7 @@ exports.registerToken = async (req, res) => {
     const device = await DeviceToken.findOneAndUpdate(
       { token },
       {
-        user: userId,
+        user: new mongoose.Types.ObjectId(userId),
         token,
         platform,
         lastUsed: new Date()
@@ -18,7 +18,10 @@ exports.registerToken = async (req, res) => {
     res.json({ message: "Token saved", device });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error saving token" });
+    console.error("FULL ERROR:", error); // 🔥 log real error
+    res.status(500).json({ 
+      message: "Error saving token",
+      error: error.message 
+    });
   }
 };

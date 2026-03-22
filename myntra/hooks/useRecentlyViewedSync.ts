@@ -27,7 +27,7 @@ export const syncRecentlyViewed = async (userId: string) => {
       .sort((a: any, b: any) => b.viewedAt - a.viewedAt)
       .slice(0, MAX);
 
-    // save locally
+    // save locally 
     await setRecentlyViewedLocal(merged);
 
     // push to server

@@ -29,7 +29,8 @@
         "foregroundImage": "./assets/images/myntra.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.viveksai.myntra"
+      "package": "com.viveksai.myntra",
+      "googleServicesFile": "./android/app/google-services.json"
     },
     "web": {
       "bundler": "metro",

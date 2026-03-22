@@ -43,7 +43,7 @@ export const useRecentlyViewed = () => {
       const localItems = await loadLocal();
 
       const res = await axios.post(`${API_URL}/sync`, {
-        userId: user._id,
+        userId: user?._id,
         localItems,
       });
 

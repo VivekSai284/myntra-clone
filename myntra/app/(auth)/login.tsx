@@ -30,7 +30,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       setisloading(true);
-      await login(email, password);
+      const user = await login(email, password);
       await syncWithServer();
       await registerForPushNotifications(user._id);
       router.replace("/(tabs)");

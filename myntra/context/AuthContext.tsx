@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     console.log("LOGIN RESPONSE:", res.data);
 
-    if (user && user._id && token) {
+    if (user && token) {
       // 🔥 SAVE TOKEN ALSO
       await saveUserData(user._id, user.fullName, user.email, token);
 
@@ -54,6 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsAuthenticated(true);
 
       await syncRecentlyViewed(user._id);
+      return user;
     } else {
       throw new Error("Login failed");
     }
